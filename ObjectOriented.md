@@ -11,6 +11,47 @@
 * 重载
   
 那么在JS中，哪些是**可以被支持**，**如何被支持**呢。
+
+在通过js模拟类的过程中有几个概念需要理解:
+* new操作符
+* 原型继承(prototype)
+  
 ## 思考面向对象设计
 
 ### 封装
+
+封装将数据及针对数据的操作组合在一样，使得我们在不改变接口的情况下，
+可以根据情况改变内部的数据结构。针对C++而言，我们一般会使用`private`
+修饰符来组织外部对该成员变量的访问，很遗憾，目前js中并不支持概念上的
+私有成员变量。
+
+下面来实现一个`person`类，可以为该实例设置名称及年纪。
+
+```js
+function Person(age, name) {
+    this._age = age;
+    this._name = name;
+}
+Person.prototype.setAge = function (age) {
+    this._age = age;
+}
+Person.prototype.getAge = function () {
+    return this._age;
+}
+Person.prototype.setName = function (name) {
+    this._name = name;
+}
+Person.prototype.getName = function(){
+    return this._name;
+}
+var p1 = new Person(18, 'jack');
+console.log("Before change age:",p1.getAge());
+console.log("Before change name:",p1.getName());
+p1.setAge(20);
+p1.setName('tom');
+console.log("End change age:",p1.getAge());
+console.log("End change name:",p1.getName());
+```
+
+* js不支持私有成员变量，个人喜欢使用`_xxx`格式代表私有变量
+  
