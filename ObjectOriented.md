@@ -54,4 +54,13 @@ console.log("End change name:",p1.getName());
 ```
 
 * js不支持私有成员变量，个人喜欢使用`_xxx`格式代表私有变量
+
+### 重载
   
+在c++中重载是指多个函数可以拥有相同的函数名，但是不同的参数类型或个数。
+在实际调用过程中，会根据传入的参数不同来决定调用哪个函数。
+
+但js是一门动态语言，且并不限制传入的参数个数及类型，所以js是不支持函数
+重载的。
+
+* [arguments object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments)
