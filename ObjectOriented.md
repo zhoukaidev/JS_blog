@@ -60,7 +60,87 @@ console.log("End change name:",p1.getName());
 在c++中重载是指多个函数可以拥有相同的函数名，但是不同的参数类型或个数。
 在实际调用过程中，会根据传入的参数不同来决定调用哪个函数。
 
-但js是一门动态语言，且并不限制传入的参数个数及类型，所以js是不支持函数
-重载的。
+但js是一门动态语言，且并不限制传入的参数个数及类型，所以**js是不支持函数重载的。**
 
 * [arguments object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments)
+  
+### 继承
+
+js通过[原型链](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain)的方式来实现类中的继承,关于原型链会专门
+写文章来介绍，本章节只描述如何使用。
+
+在这里我们会定义一个`Person`类，其中包含`姓名`及`年龄`变量，
+然后`Student`类会继承`Person`类，并在此基础上添加`学号`变量。
+
+所以这里`Person`类为父类, `Student`类为子类。
+```js
+function Person(name, age) {
+    this._name = name;
+    this._age = age;
+}
+Person.prototype = {
+    setName : function(name) {
+        this._name = name;
+    },
+    getName : function() {
+        return this._name;
+    },
+    setAge : function(age) {
+        this._age = age;
+    },
+    getAge : function(){
+        return this._age;
+    }
+}
+
+function Student(name, age, studentID) {
+    Person.call(this, name, age);
+    this._studentID = studentID;
+}
+//Student的原型与Person的原型组成原型链
+Student.prototype = Object.create(Person.prototype);
+//定义针对Student的函数
+Student.prototype.setID = function(id) {
+    this._studentID = id;
+}
+Student.prototype.getID = function() {
+    return this._studentID;
+}
+
+var stu = new Student("Tom",20,"2012");
+console.log(stu.getName());
+console.log(stu.getAge());
+console.log(stu.getID());
+```
+
+* js中无法模拟出多重继承，虚拟继承等概念
+* 有些代码在实现原型链的时候会采用`Student.prototype = new Person(xxx,xxx)`的写法，这样可能会产生副作用，尽量不要采用
+  
+### 多态
+
+在这里称呼多态感觉并不是太合适，事实上`多态`用在C++中主要
+用于描述动态绑定的概念，其中会涉及到向上类型转换，针对JS而言，
+可能称呼`重写`更加合适吧。
+
+```js
+function Person(name, age) {
+    this._name = name;
+    this._age = age;
+}
+Person.prototype.introduce = function(){
+    console.log("I am %s, i am %d years old", this._name, this._age);
+}
+
+function Student(name, age, id){
+    Person.call(this, name, age);
+    this._studentID = id;
+}
+Student.prototype = Object.create(Person.prototype);
+Student.prototype.introduce = function(){
+    console.log("I am %s, I am a student", this._name);
+}
+var person = new Person("Tom",18);
+person.introduce();
+var student = new Student("Jack",20, "2012");
+student.introduce();
+```
